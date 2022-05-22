@@ -3,7 +3,22 @@ hr{
     padding: 0px;
 }
 
-#conjugate{
+#z-plane{
+    border: 2px solid rgb(0, 132, 161);
+    
+}
+
+.plot{
+    margin-bottom: 0px;
+}
+
+.imageMenu{
+    width: 70px;
+    height: 70px;
+}
+
+.form-range{
+    margin: 5px 20px;
 }
 
 .tab-content{

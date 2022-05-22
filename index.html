@@ -10,9 +10,8 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
     <!-- JS -->
-    <script rel="stylesheet" href="js/jquery.min.js"></script>
-    <script rel="stylesheet" href="js/bootstrap.min.js"></script>
-    
+    <!-- Load plotly.js into the DOM -->
+	<script src='js/plotly-2.12.1.min.js'></script>
     <!-- icon -->
     <link rel="icon" href="./images/icon.png">
 
@@ -29,32 +28,50 @@
             <li class="nav-item">
                 <a class="nav-link" id="home-tab" data-toggle="tab" href="#zeros-poles" role="tab" aria-controls="zeros-poles" aria-selected="false">Zeros & Poles</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" id="filter-tab" data-toggle="tab" href="#filter" role="tab" aria-controls="filter" aria-selected="false">Filter</a>
+            </li>
             <li class="nav-item"><!-- hidden -->
                 <a class="nav-link" id="signal-tab" data-toggle="tab" href="#signal" role="tab" aria-controls="signal" aria-selected="false">Signal</a>
             </li>
         </ul>
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="menu" role="tabpanel" aria-labelledby="menu-tab">
-                <img width="60" height="60" src="./images/browse.png" alt="Browse" data-toggle="tooltip" data-placement="bottom" title="Open signal to filter" class="img-thumbnail">     
+                <img  src="./images/browse.png" alt="Browse" data-toggle="tooltip" data-placement="bottom" title="Open signal to filter" class="img-thumbnail imageMenu">     
             </div>
             <div class="tab-pane fade" id="zeros-poles" role="tabpanel" aria-labelledby="#zeros-poles-tab">
-                <img width="60" height="60" src="./images/zero.png" alt="zero" data-toggle="tooltip" data-placement="bottom" title="Add Zero" class="img-thumbnail">
-                <img width="60" height="60" src="./images/pole.png" alt="pole" data-toggle="tooltip" data-placement="bottom" title="Add Pole" class="img-thumbnail">
-                <img width="60" height="60" src="./images/zeros.png" alt="Clear Zeros" data-toggle="tooltip" data-placement="bottom" title="Clear All Zeros" class="img-thumbnail">
-                <img width="60" height="60" src="./images/poles.png" alt="Clear Poles" data-toggle="tooltip" data-placement="bottom" title="Clear All Poles" class="img-thumbnail">
-                <img width="60" height="60" src="./images/clearAll.png" alt="Clear All" data-toggle="tooltip" data-placement="bottom" title="Clear All" class="img-thumbnail">
-                <img width="60" height="60" src="./images/delete.png" alt="Delete" data-toggle="tooltip" data-placement="bottom" title="Delete" class="img-thumbnail">
-                
-                <div class="">
-                    <input class="form-check-input" type="checkbox" value="Conjugate" id="conjugate" /> 
-                    <label class="form-check-label" for="conjugate">Add Conjugates</label>
-                </divc>
-                
+                <div class="row">
+                    <div class="col-3">
+                        <img src="./images/zero.png" alt="zero" data-toggle="tooltip" data-placement="bottom" title="Add Zero" class="img-thumbnail imageMenu">
+                        <img src="./images/pole.png" alt="pole" data-toggle="tooltip" data-placement="bottom" title="Add Pole" class="img-thumbnail imageMenu">
+                        <img src="./images/clearZeros.jpeg" alt="Clear Zeros" data-toggle="tooltip" data-placement="bottom" title="Clear All Zeros" class="img-thumbnail imageMenu">
+                        <img src="./images/clearPoles.jpeg" alt="Clear Poles" data-toggle="tooltip" data-placement="bottom" title="Clear All Poles" class="img-thumbnail imageMenu">
+                        <img src="./images/clearAll.png" alt="Clear All" data-toggle="tooltip" data-placement="bottom" title="Clear All" class="img-thumbnail imageMenu">
+                        <img src="./images/delete.png" alt="Delete" data-toggle="tooltip" data-placement="bottom" title="Delete" class="img-thumbnail imageMenu">
+                    </div>
+                    <div class="col-1">
+                        <input class="form-check-input" type="checkbox" value="Conjugate" id="conjugate" />
+                        <label class="form-check-label" for="conjugate">Add Conjugates</label>
+                        <br>
+                        <input class="form-check-input" type="checkbox" value="With All Pass Filter" id="passFilter" />
+                        <label class="form-check-label" for="passFilter">With All Pass Filter</label>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="filter" role="tabpanel" aria-labelledby="#filter-tab">
+                <div class="Item">
+                    <label>a = 20 + 20j </label>
+                    <label>a = 15 + 20j </label>
+                    <label>a = 2 + 20j </label>
+                    <label>a = 3 + 20j </label>   
+                </div>
             </div>
             <div class="tab-pane fade" id="signal" role="tabpanel" aria-labelledby="#signal-tab">
                 <div class="Item">
                     <div>
-                        <label for="speedSignal">Speed : </label> <input type="range" class="form-range" min="0" max="10" step="1" id="speedSignal"> 
+                        <label for="speedSignal">Speed : </label> 
+                        <input type="range" class="form-range" min="0" max="10" step="1" id="speedSignal"> 
+                        <label for="speedSignal">50%</label> 
                     </div>   
                 </div>
             </div>
@@ -62,57 +79,36 @@
 
         <hr>            
 
-        <div id="accordion">
-            <div class="card">
-                <div class="card-header" id="headingOne">
-                <h5 class="mb-0">
-                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    Collapsible Group Item #1
-                    </button>
-                </h5>
-                </div>
-            
-                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                <div class="card-body">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                </div>
-                </div>
+        <div class="row">
+            <div class="col-12">
+                <center>
+                    <canvas width="400px" height="400px" id="z-plane"></canvas>
+                    <div id="zeros"></div>
+                    <div id="poles"></div>
+                </center>    
             </div>
-            <div class="card">
-                <div class="card-header" id="headingTwo">
-                <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                    Collapsible Group Item #2
-                    </button>
-                </h5>
-                </div>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                <div class="card-body">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                </div>
-                </div>
+            <div class="col-6">
+                <div class="plot" id="magnitude-plot"></div>
             </div>
-            <div class="card">
-                <div class="card-header" id="headingThree">
-                <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                    Collapsible Group Item #3
-                    </button>
-                </h5>
-                </div>
-                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                <div class="card-body">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                </div>
-                </div>
+            <div class="col-6">                
+                <div class="plot" id="phase-plot"></div>
             </div>
         </div>
-    </div>
+
+        <div class="row">
+            <div class="col-6">
+                <div id="original-signal-plot"></div>
+            </div>
+            <div class="col-6">
+                <div id="filtered-signal-plot"></div>
+            </div>
+        </div>
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="js/jquery-3.2.1.slim.min.js"></script>
     <script src="js/popper.min.js" ></script>
     <script src="js/bootstrap.min.js"></script>
+    <!-- My script javascript file -->
     <script src="js/script.js"></script>
 </body>
 </html>
