@@ -17,11 +17,6 @@ var $phasePlot = $("#phase-plot");
 
 zeros = new Array // Zeros positions array
 poles = new Array // Poles positions array
-zeros.push([0.5, 0]);
-zeros.push([0, 0.5]);
-
-poles.push([0.5, 0.5]);
-poles.push([0.75, 0]);
 
 var zerosNumber = 0;
 var polesNumber = 0;
