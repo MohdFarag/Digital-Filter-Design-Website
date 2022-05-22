@@ -31,35 +31,71 @@ function clearAllPoints() {
     drawZplane(poles, zeros);
 }
 
-// Clear All Zeros
+// Clear all zeros
 function clearZeros() {
     zeros = [];
     zerosNumber = 0;
-    setZplane(poles, zeros);
+    drawZplane(poles, zeros);
 }
 
-// Clear All Poles
+// Clear all poles
 function clearPoles() {
     poles = [];
     polesNumber = 0;
-    setZplane(poles, zeros);
+    drawZplane(poles, zeros);
 }
 
+// Add new pole to Z plane
+function addNewPole() {
+    // // console.log("I'm here!");
+    points = document.getElementById("poles");
+    var div = document.createElement("div");
+    div.id = 'pole-' + polesNumber;
+    points.appendChild(div);
+    poles.push([0, 0]);
+    polesNumber = polesNumber + 1;
+    drawZplane(poles, zeros);
+}
+
+function addNewZero() {
+    points = document.getElementById("zeros");
+    var div = document.createElement('div');
+    div.id = 'zero-' + zerosNumber;
+    points.appendChild(div);
+    zeros.push([0, 0]);
+    zerosNumber = zerosNumber + 1;
+    drawZplane(poles, zeros);
+}
 
 // this var will hold the index of the selected point in zplane
 var selectedPoint = -1;
 
 // test if x,y is inside the bounding box of texts[textIndex]
 function pointHittest(x, y, textIndex) {
-    console.log("poles.length is " + poles.length);
+    // console.log([x,y])
+    // console.log("poles.length is " + poles.length);
     if(textIndex >= polesNumber){
-        console.log("check some zero!");
-        return (x >= zeros[textIndex - polesNumber][0] - 0.2 && x <= zeros[textIndex - polesNumber][0] + 0.2 && y >= zeros[textIndex - polesNumber][1] - 0.2 && y <= zeros[textIndex - polesNumber][1] + 0.2);
+        // console.log("check some zero!");
+        // console.log(x, y, zeros[textIndex])
+        return insideElement(x, y, poles[textIndex - polesNumber], 0.02);
     }
+
     if(textIndex < polesNumber){
-        console.log("check some pole!");
-        return (x >= poles[textIndex][0] - 0.05 && x <= poles[textIndex][0] + 0.05 && y >= poles[textIndex][1] - 0.05 && y <= poles[textIndex][1] + 0.05);
+        // console.log("check some pole!");
+        return insideElement(x, y, poles[textIndex], 0.05);
     }
+}
+
+function insideElement(x, y, point, padd) {
+
+    xPoint = point[0]
+    yPoint = point[1]
+
+    if ((x > xPoint - padd) && (x <= xPoint + padd) && (y > yPoint - padd) && (y <= yPoint + padd)) {
+            return true
+    }
+
+    return false;
 }
 
 // handle mousedown events
@@ -70,20 +106,20 @@ function handleMouseDown(e) {
     e.preventDefault();
     startX = parseInt(e.clientX - offsetX);
     startY = parseInt(e.clientY - offsetY);
-    console.log("you selected point [" + startX + ", " + startY + "]");
-    console.log("which is point [" + (startX+70)/100 + ", " + -(startY-150)/100 + "]");
+    // // console.log("you selected point [" + startX + ", " + startY + "]");
+    // // console.log("which is point [" + (startX+70)/100 + ", " + -(startY-150)/100 + "]");
 
-    console.log("poles number is " + poles.length);
-    console.log("zeros number is " + zeros.length);
+    // // console.log("poles number is " + poles.length);
+    // // console.log("zeros number is " + zeros.length);
     totalLength = polesNumber + zerosNumber;
     // Put your mousedown stuff here
     for (var i = 0; i < totalLength; i++) {
         if (pointHittest((startX+70)/100, -(startY-150)/100, i)) {
             selectedPoint = i;
             if(i >= polesNumber){
-                console.log("selected zero" + (i - polesNum));
+                // console.log("selected zero" + (i - polesNum));
             }else if(i < polesNumber){
-                console.log("selected pole" + (i));
+                // console.log("selected pole" + (i));
             }
         }
     }
@@ -97,7 +133,7 @@ function handleMouseMove(e) {
     if (selectedPoint < 0) {
         return;
     }
-    // console.log("Mouse is Moving!...");
+    // // console.log("Mouse is Moving!...");
     e.preventDefault();
     mouseX = parseInt(e.clientX - offsetX);
     mouseY = parseInt(e.clientY - offsetY);
@@ -137,11 +173,11 @@ function handleMouseClick(e) {
     // e.preventDefault();
     startX = parseInt(e.clientX - offsetX);
     startY = parseInt(e.clientY - offsetY);
-    console.log("you selected point [" + startX + ", " + startY + "]");
-    console.log("which is point [" + (startX+70)/100 + ", " + -(startY-150)/100 + "]");
+    // console.log("you selected point [" + startX + ", " + startY + "]");
+    // console.log("which is point [" + (startX+70)/100 + ", " + -(startY-150)/100 + "]");
 
-    console.log("poles number is " + poles.length);
-    console.log("zeros number is " + zeros.length);
+    // console.log("poles number is " + poles.length);
+    // console.log("zeros number is " + zeros.length);
     totalLength = polesNumber + zerosNumber;
     // Put your mousedown stuff here
     for (var i = 0; i < totalLength; i++) {
@@ -149,11 +185,11 @@ function handleMouseClick(e) {
             if(i >= polesNumber){
                 zeros.splice(i - polesNumber, 1);
                 zerosNumber = zerosNumber -1;
-                console.log("selected zero" + (i - polesNum));
+                // console.log("selected zero" + (i - polesNum));
             }else if(i < polesNumber){
                 poles.splice(i, 1);
                 polesNumber = polesNumber -1;
-                console.log("selected pole" + (i));
+                // console.log("selected pole" + (i));
             }
         }
     }
@@ -244,7 +280,6 @@ function drawResponse(){
 }
 
 
-
 // listen for mouse events
 $zPlane.mousedown(function (e) {
     handleMouseDown(e);
@@ -261,6 +296,10 @@ $zPlane.mouseout(function (e) {
 $zPlane.dblclick(function (e) {
     handleMouseClick(e);
 });
+
+
+addNewPole();
+addNewZero();
 
 // Draw Z plane
 drawZplane(poles, zeros);
