@@ -31,7 +31,7 @@
             <li class="nav-item">
                 <a class="nav-link" id="filter-tab" data-toggle="tab" href="#filter" role="tab" aria-controls="filter" aria-selected="false">Filter</a>
             </li>
-            <li class="nav-item"><!-- hidden -->
+            <li class="nav-item" hidden >
                 <a class="nav-link" id="signal-tab" data-toggle="tab" href="#signal" role="tab" aria-controls="signal" aria-selected="false">Signal</a>
             </li>
         </ul>
@@ -42,12 +42,12 @@
             <div class="tab-pane fade" id="zeros-poles" role="tabpanel" aria-labelledby="#zeros-poles-tab">
                 <div class="row">
                     <div class="col-3">
-                        <img src="./images/zero.png" alt="zero" data-toggle="tooltip" data-placement="bottom" title="Add Zero" class="img-thumbnail imageMenu">
-                        <img src="./images/pole.png" alt="pole" data-toggle="tooltip" data-placement="bottom" title="Add Pole" class="img-thumbnail imageMenu">
-                        <img src="./images/clearZeros.jpeg" alt="Clear Zeros" data-toggle="tooltip" data-placement="bottom" title="Clear All Zeros" class="img-thumbnail imageMenu">
-                        <img src="./images/clearPoles.jpeg" alt="Clear Poles" data-toggle="tooltip" data-placement="bottom" title="Clear All Poles" class="img-thumbnail imageMenu">
-                        <img src="./images/clearAll.png" alt="Clear All" data-toggle="tooltip" data-placement="bottom" title="Clear All" class="img-thumbnail imageMenu">
-                        <img src="./images/delete.png" alt="Delete" data-toggle="tooltip" data-placement="bottom" title="Delete" class="img-thumbnail imageMenu">
+                        <a onclick="addNewZero()"><img src="./images/zero.png" alt="zero" data-toggle="tooltip" data-placement="bottom" title="Add Zero" class="img-thumbnail imageMenu"></a>
+                        <a onclick="addNewPole()"><img src="./images/pole.png" alt="pole" data-toggle="tooltip" data-placement="bottom" title="Add Pole" class="img-thumbnail imageMenu"></a>
+                        <a onclick="clearZeros()"><img src="./images/clearZeros.jpeg" alt="Clear Zeros" data-toggle="tooltip" data-placement="bottom" title="Clear All Zeros" class="img-thumbnail imageMenu"></a>
+                        <a onclick="clearPoles()"><img src="./images/clearPoles.jpeg" alt="Clear Poles" data-toggle="tooltip" data-placement="bottom" title="Clear All Poles" class="img-thumbnail imageMenu"></a>
+                        <a onclick="clearAllPoints()"><img src="./images/clearAll.png" alt="Clear All" data-toggle="tooltip" data-placement="bottom" title="Clear All" class="img-thumbnail imageMenu"></a>
+                        <!-- <a onclick="addNewPole()"><img src="./images/delete.png" alt="Delete" data-toggle="tooltip" data-placement="bottom" title="Delete" class="img-thumbnail imageMenu"></a> -->
                     </div>
                     <div class="col-1">
                         <input class="form-check-input" type="checkbox" value="Conjugate" id="conjugate" />
@@ -81,11 +81,11 @@
 
         <div class="row">
             <div class="col-12">
-                <center>
+                <!-- <center> -->
                     <canvas width="400px" height="400px" id="z-plane"></canvas>
                     <div id="zeros"></div>
                     <div id="poles"></div>
-                </center>    
+                <!-- </center> -->
             </div>
             <div class="col-6">
                 <div class="plot" id="magnitude-plot"></div>

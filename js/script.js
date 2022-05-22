@@ -72,7 +72,7 @@ var selectedPoint = -1;
 
 // test if x,y is inside the bounding box of texts[textIndex]
 function pointHittest(x, y, textIndex) {
-    // console.log([x,y])
+    console.log([x,y]);
     // console.log("poles.length is " + poles.length);
     if(textIndex >= polesNumber){
         // console.log("check some zero!");
@@ -201,8 +201,8 @@ function handleMouseClick(e) {
 function drawZplane(poles, zeros) {
 
 	var radius = 100;	// radius of unit circle
-	var pSize = 5;		// size of pole
-	var zSize = 5;      // size of zero
+	var pSize = 4;		// size of pole
+	var zSize = 4;      // size of zero
 
 	var zPlane = document.getElementById("z-plane"); // Get z Plane canvas element
 	var ctx = zPlane.getContext("2d");
@@ -279,7 +279,6 @@ function drawResponse(){
         
 }
 
-
 // listen for mouse events
 $zPlane.mousedown(function (e) {
     handleMouseDown(e);
@@ -296,10 +295,6 @@ $zPlane.mouseout(function (e) {
 $zPlane.dblclick(function (e) {
     handleMouseClick(e);
 });
-
-
-addNewPole();
-addNewZero();
 
 // Draw Z plane
 drawZplane(poles, zeros);
