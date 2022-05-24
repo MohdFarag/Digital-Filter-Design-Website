@@ -1,4 +1,8 @@
 
+body{
+    /* background: rgb(128, 204, 255); */
+}
+
 hr{
     padding: 0px;
 }
@@ -6,6 +10,22 @@ hr{
 #z-plane{
     border: 2px solid rgb(0, 132, 161);
     
+}
+
+.big-plane{
+    background: url(../images/bgUp0.png) no-repeat;
+    margin-top: -16px;
+    padding-top: 10px;
+}
+
+.response-plane{
+    /* background: url(../images/bgUp0.png) no-repeat; */
+}
+
+.plane{
+    box-sizing: border-box;
+    display: block;
+    text-align: -webkit-center;
 }
 
 .plot{

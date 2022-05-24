@@ -12,9 +12,12 @@
     <!-- JS -->
     <!-- Load plotly.js into the DOM -->
 	<script src='js/plotly-2.12.1.min.js'></script>
-    <!-- icon -->
+     <!-- Math.js -->
+     <script src="js/math.min.js" type="text/javascript"></script>
+     <!-- Icon -->
     <link rel="icon" href="./images/icon.png">
 
+    <!-- Title -->
     <title>Digital Filter Design</title>
 </head>
 <body>
@@ -37,7 +40,10 @@
         </ul>
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="menu" role="tabpanel" aria-labelledby="menu-tab">
-                <img  src="./images/browse.png" alt="Browse" data-toggle="tooltip" data-placement="bottom" title="Open signal to filter" class="img-thumbnail imageMenu">     
+                <a id="submit-file" href="#" onclick="performClick('files');">
+                    <img  src="./images/browse.png" alt="Browse" data-toggle="tooltip" data-placement="bottom" title="Open signal to filter" class="img-thumbnail imageMenu">     
+                </a>
+                <input type="file" id="files" hidden />
             </div>
             <div class="tab-pane fade" id="zeros-poles" role="tabpanel" aria-labelledby="#zeros-poles-tab">
                 <div class="row">
@@ -49,7 +55,7 @@
                         <a onclick="clearAllPoints()"><img src="./images/clearAll.png" alt="Clear All" data-toggle="tooltip" data-placement="bottom" title="Clear All" class="img-thumbnail imageMenu"></a>
                         <!-- <a onclick="addNewPole()"><img src="./images/delete.png" alt="Delete" data-toggle="tooltip" data-placement="bottom" title="Delete" class="img-thumbnail imageMenu"></a> -->
                     </div>
-                    <div class="col-1">
+                    <div class="col-2 form-check">
                         <input class="form-check-input" type="checkbox" value="Conjugate" id="conjugate" />
                         <label class="form-check-label" for="conjugate">Add Conjugates</label>
                         <br>
@@ -78,22 +84,28 @@
         </div>
 
         <hr>            
-
-        <div class="row">
-            <div class="col-12">
-                <!-- <center> -->
-                    <canvas width="400px" height="400px" id="z-plane"></canvas>
-                    <div id="zeros"></div>
-                    <div id="poles"></div>
-                <!-- </center> -->
+        
+        <div class="row big-plane">
+            <div class="col-12 plane">
+                <h3>Z Plane</h3>
+                <canvas width="400px" height="400px" id="z-plane"></canvas>
+                <div id="zeros"></div>
+                <div id="poles"></div>
             </div>
-            <div class="col-6">
+        </div>
+
+        <hr>
+        
+        <div class="row response-plane">
+            <div class="col-6 plane">
                 <div class="plot" id="magnitude-plot"></div>
             </div>
-            <div class="col-6">                
+            <div class="col-6 plane">     
                 <div class="plot" id="phase-plot"></div>
             </div>
         </div>
+
+        <hr>
 
         <div class="row">
             <div class="col-6">
@@ -105,10 +117,13 @@
         </div>
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="js/jquery-3.2.1.slim.min.js"></script>
-    <script src="js/popper.min.js" ></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="./js/jquery-3.2.1.slim.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/papaparse.min.js"></script>
+    <script src="./js/popper.min.js" ></script>
+    <script src="./js/bootstrap.min.js"></script>
+        
     <!-- My script javascript file -->
-    <script src="js/script.js"></script>
+    <script src="./js/script.js"></script>
 </body>
 </html>
