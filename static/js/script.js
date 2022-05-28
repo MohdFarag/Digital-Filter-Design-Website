@@ -25,8 +25,6 @@ yloadedData = new Array
 // Response data
 magResponse = new Array
 phaseResponse = new Array
-// Filtered data
-yfilteredData = new Array
 
 zeros = new Array // Zeros positions array
 var zerosNumber = 0;
@@ -36,6 +34,8 @@ var polesNumber = 0;
 //  Variables for mag and phase responses
 var Z = new Array(100);
 var freqAxis = new Array(100);
+
+var signalNav = document.getElementById("signal-nav");
 
 for(let i = 0; i < 100; i++){
     Z[i] = math.complex(Math.cos(Math.PI * (i/100)), Math.sin(Math.PI * (i/100)));
@@ -113,6 +113,23 @@ function loadData(results){
     xloadedData = getCol(finalArray, 0);
     yloadedData = getCol(finalArray, 1);
 
+    dict = {
+        "loadedData": JSON.stringify(yloadedData),
+        "zeros": JSON.stringify(zeros),
+        "poles": JSON.stringify(poles)
+    };
+
+    
+
+    $.ajax({
+        url:"/filter",
+        type:"POST",
+        contentType: "application/json",
+        data: JSON.stringify(dict)
+    });
+
+    signalNav.classList.add('visible')
+    signalNav.classList.remove('hidden')
     plotLoadedData();
 }
 
@@ -292,8 +309,6 @@ function pointHittest(x, y, textIndex) {
     x -= 2.71 ;
     y += 0.55;
 
-    console.log(x,y);
-
     if(textIndex >= polesNumber){
         return insideElement(x, y, zeros[textIndex - polesNumber]);
     }
@@ -449,40 +464,41 @@ function drawResponse(){
     plotLoadedData();
 }
 
-function calcFilterData(){
-    coefSysY = new Array(poles.length);
-    coefSysX = new Array(zeros.length);
+// function calcFilterData(){
+//     coefSysY = new Array(poles.length);
+//     coefSysX = new Array(zeros.length);
 
-    for (let i = 0; i < coefSysX.length; i++) {
-        coefSysX[i] = 0;
-    }
+//     for (let i = 0; i < coefSysX.length; i++) {
+//         coefSysX[i] = 0;
+//     }
 
-    for (let i = 0; i < coefSysY.length; i++) {
-        coefSysY[i] = 0;
-    }
+//     for (let i = 0; i < coefSysY.length; i++) {
+//         coefSysY[i] = 0;
+//     }
 
-    for (let i = 0; i < yfilteredData.length; i++) {
-        for (let j = 1; j < coefSysX.length; j++) {
-            if (i-j >= 0) {
-                yfilteredData[i] += yloadedData[i-j] * coefSysX[j];     
-            }
-        }
-    }
+//     for (let i = 0; i < yfilteredData.length; i++) {
+//         for (let j = 1; j < coefSysX.length; j++) {
+//             if (i-j >= 0) {
+//                 yfilteredData[i] += yloadedData[i-j] * coefSysX[j];     
+//             }
+//         }
+//     }
 
-    for (let i = 0; i < yfilteredData.length; i++) {
-        for (let j = 0; j < coefSysY.length; j++) {
-            if (i-j >= 0) {
-                yfilteredData[i] += yfilteredData[i-j] * coefSysY[j];     
-            }else{
-                yfilteredData[i] = 0;
-            }
-        }
-    }
+//     for (let i = 0; i < yfilteredData.length; i++) {
+//         for (let j = 0; j < coefSysY.length; j++) {
+//             if (i-j >= 0) {
+//                 yfilteredData[i] += yfilteredData[i-j] * coefSysY[j];     
+//             }else{
+//                 yfilteredData[i] = 0;
+//             }
+//         }
+//     }
 
-    return yfilteredData
-}
+//     return yfilteredData
+// }
 
 // Draw loaded and filtered data
+
 function plotLoadedData(){
 
     var originalData = {
@@ -497,10 +513,13 @@ function plotLoadedData(){
         title: 'Your Data',
         showlegend: true
     };
+            
+    Plotly.newPlot('original-signal-plot', [originalData], originalLayout);
+}
 
-    /////////////////////////////////////////
+function plotFilteredData(yfilteredData){
 
-    yfilteredData = calcFilterData();
+    // yfilteredData = calcFilterData();
     var filteredData = {
         x: xloadedData,
         y: yfilteredData,
@@ -513,12 +532,53 @@ function plotLoadedData(){
         title: 'Filtered Data',
         showlegend: true
     };  
-            
-    Plotly.newPlot('original-signal-plot', [originalData], originalLayout);
     Plotly.newPlot('filtered-signal-plot', [filteredData], filteredLayout);
+
 }
 
-// listen for mouse events
+function updatePlotData(){
+    var arrayLength = 30
+    var newArray = []
+
+    for(var i = 0; i < arrayLength; i++) {
+        var y = Math.round(Math.random()*10) + 1
+        newArray[i] = y
+    }
+
+    Plotly.newPlot('myDiv', [{
+    y: newArray,
+    mode: 'lines',
+    line: {color: '#80CAF6'}
+    }]);
+
+    var cnt = 0;
+
+    var interval = setInterval(function() {
+
+    var y = Math.round(Math.random()*10) + 1
+    newArray = newArray.concat(y)
+    newArray.splice(0, 1)
+
+    var data_update = {
+        y: [newArray]
+    };
+
+    Plotly.update('myDiv', data_update)
+
+    if(++cnt === 100) clearInterval(interval);
+    }, 1000); 
+}
+
+// Getter function
+function getOriginalData(){
+    return yloadedData
+}
+
+function getZerosPoles(){
+    return zeros, poles
+}
+
+// Listen for mouse events
 $zPlane.mousedown(function (e) {
     handleMouseDown(e);
 });
@@ -539,3 +599,4 @@ $zPlane.dblclick(function (e) {
 drawZplane(poles, zeros);
 // Draw Data
 plotLoadedData();
+plotFilteredData([0,0])

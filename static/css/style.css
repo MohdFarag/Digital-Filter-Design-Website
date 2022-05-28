@@ -9,7 +9,6 @@ hr{
 
 #z-plane{
     border: 2px solid rgb(0, 132, 161);
-    
 }
 
 .big-plane{
@@ -18,9 +17,9 @@ hr{
     padding-top: 10px;
 }
 
-.response-plane{
-    /* background: url(../images/bgUp0.png) no-repeat; */
-}
+/* .response-plane{
+    background: url(../images/bgUp0.png) no-repeat; 
+} */
 
 .plane{
     box-sizing: border-box;
@@ -43,4 +42,12 @@ hr{
 
 .tab-content{
     padding-top: 15px;
+}
+
+.visible{
+    visibility: visible;
+}
+
+.hidden{
+    visibility: hidden;
 }
