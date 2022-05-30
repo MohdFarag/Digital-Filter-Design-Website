@@ -89,20 +89,25 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" id="signal" role="tabpanel" aria-labelledby="#signal-tab">
-                    <div class="Item">
-                        <table>
-                            <tr>
-                                <td>
-                                    <a onclick="plotFilteredData()" href="#">
-                                        <img src="./images/filter.png" alt="Filter" data-toggle="tooltip" data-placement="bottom" title="Filter the signal" class="img-thumbnail imageMenu">
-                                    </a>
-                                </td>
-                                <td><label class="ml-3 mr-1" for="speedSignal">Speed: </label></td>
-                                <td><input type="range" class="form-range" min="0" max="10" step="1" id="speedSignal"> </td>
-                                <td><label id="speedLabel" for="speedSignal">50%</label></td>
-                            </tr>
-                        </table>   
-                    </div>
+                    <table>
+                        <tr>
+                            <td>
+                                <a onclick="plotFilteredData()" href="#">
+                                    <img src="./images/filter.png" 
+                                        alt="Filter" 
+                                        data-toggle="tooltip" 
+                                        data-placement="bottom" 
+                                        title="Filter the signal" 
+                                        class="img-thumbnail imageMenu" />
+                                </a>
+                            </td>
+                            <td><label class="ml-3 mr-1 speedLabel" for="speedSignal">Speed: </label></td>
+                            <td>                                    
+                                <input type="range" class="slider form-range" min="0" max="100" step="1" id="speedSignal">
+                            </td>
+                            <td><label class="ml-1 speedLabel" id="speedLabel" for="speedSignal">50</label></td>
+                        </tr>
+                    </table>   
                 </div>
             </div>
         </nav>
@@ -110,30 +115,30 @@
 
         <hr>            
         
-        <!-- Z plane div Start -->
         <div class="row big-plane">
-            <div class="col-12 plane">
+            <!-- Z plane div Start -->
+            <div class="col-6 plane">
                 <h3>Z Plane</h3>
-                <canvas width="400px" height="400px" id="z-plane"></canvas>
+                <canvas width="500px" height="500px" id="z-plane"></canvas>
                 <div id="zeros"></div>
                 <div id="poles"></div>
             </div>
-        </div>
-        <!-- Z plane div End -->
+            <!-- Z plane div End -->
 
-        <hr>
+            <!-- Responese div Start -->
+            <div class="col-6 response-plane">
+                <div class="row">
+                    <div class="col-12 plane">
+                        <div class="plot" id="magnitude-plot"></div>
+                    </div>
+                    <div class="col-12 plane">     
+                        <div class="plot" id="phase-plot"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Responese div End -->
+        </div>     
         
-        <!-- Responese div Start -->
-        <div class="row response-plane">
-            <div class="col-6 plane">
-                <div class="plot" id="magnitude-plot"></div>
-            </div>
-            <div class="col-6 plane">     
-                <div class="plot" id="phase-plot"></div>
-            </div>
-        </div>
-        <!-- Responese div End -->
-
         <hr>
 
         <!-- Loaded Signal div Start -->
@@ -157,6 +162,7 @@
     <script src="./js/bootstrap.min.js"></script>
         
     <!-- My script javascript file -->
+    <script src="./js/server.js"></script>
     <script src="./js/additions.js"></script>
     <script src="./js/plotter.js"></script>
     <script src="./js/zPlane.js"></script>

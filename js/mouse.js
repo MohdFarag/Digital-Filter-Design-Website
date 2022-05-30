@@ -13,7 +13,7 @@ function handleMouseDown(e) {
     totalLength = polesNumber + zerosNumber;
     // Put your mousedown stuff here
     for (var i = 0; i < totalLength; i++) {
-        if (pointHittest((startX+70)/100, -(startY-150)/100, i)) {
+        if (pointHittest((startX+70)/150, -(startY-150)/150, i)) {
             selectedPoint = i;
         }
     }
@@ -33,8 +33,8 @@ function handleMouseMove(e) {
     mouseY = parseInt(e.clientY - offsetY);
 
     // Put your mousemove stuff here
-    var dx = (mouseX - startX)/100;
-    var dy = -(mouseY - startY)/100;
+    var dx = (mouseX - startX)/150;
+    var dy = -(mouseY - startY)/150;
     
     startX = mouseX;
     startY = mouseY;
@@ -71,7 +71,7 @@ function handleMouseClick(e) {
     totalLength = polesNumber + zerosNumber;
     // Put your mousedown stuff here
     for (var i = 0; i < totalLength; i++) {
-        if (pointHittest((startX+70)/100, -(startY-150)/100, i)) {
+        if (pointHittest((startX+70)/150, -(startY-150)/150, i)) {
             if(i >= polesNumber){
                 zeros.splice(i - polesNumber, 1);
                 zerosNumber = zerosNumber -1;
@@ -87,10 +87,6 @@ function handleMouseClick(e) {
 
 // test if x,y is inside the bounding box of texts[textIndex]
 function pointHittest(x, y, textIndex) {
-    
-    // Edit
-    x -= 2.71 ;
-    y += 0.55;
 
     if(textIndex >= polesNumber){
         return insideElement(x, y, zeros[textIndex - polesNumber]);
@@ -99,6 +95,7 @@ function pointHittest(x, y, textIndex) {
     if(textIndex < polesNumber){
         return insideElement(x, y, poles[textIndex]);
     }
+
 }
 
 // Check if click inside the point

@@ -59,11 +59,10 @@ function addNewZero() {
     drawZplane(poles, zeros);
 }
 
-
 // Draw Z plane
 function drawZplane(poles, zeros) {
 
-	var radius = 100;	// radius of unit circle
+	var radius = 150;	// radius of unit circle
 	var pSize = 5;		// size of pole
 	var zSize = 5;      // size of zero
 

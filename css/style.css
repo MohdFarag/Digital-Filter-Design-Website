@@ -14,12 +14,8 @@ hr{
 .big-plane{
     background: url(../images/bgUp0.png) no-repeat;
     margin-top: -16px;
-    padding-top: 10px;
+    padding-top: 50px;
 }
-
-/* .response-plane{
-    background: url(../images/bgUp0.png) no-repeat; 
-} */
 
 .plane{
     box-sizing: border-box;
@@ -47,3 +43,49 @@ hr{
 .hidden{
     visibility: hidden;
 }
+
+
+/* Slider */
+.slidercontainer {
+    width: 100%;
+}
+  
+.slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    margin-bottom: 15px;
+  }
+  
+  .slider:hover {
+    opacity: 1;
+  }
+  
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background: #0082d9;
+    cursor: pointer;
+  }
+  
+  .slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #0082d9;
+    cursor: pointer;
+  }
+  
+  .speedLabel{
+    font-size: 16px;
+    color: rgb(0 124 207);
+  }

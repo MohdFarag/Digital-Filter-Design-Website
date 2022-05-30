@@ -1,10 +1,17 @@
 
-BASE_URL = "http://127.0.0.1:9000"
-
 // Design 
 $(function () {
     $('[data-toggle="tooltip"]').tooltip()
 }) 
+
+var slider = document.getElementById("speedSignal");
+var speedLabel = document.getElementById("speedLabel");
+speedLabel.innerHTML = slider.value; // Display the default slider value
+
+// Update the current slider value (each time you drag the slider handle)
+slider.oninput = function() {
+    speedLabel.innerHTML = this.value;
+}
 
 // Magnitude plot
 var $magnitudePlot = $("#magnitude-plot");
@@ -37,6 +44,7 @@ var signalNav = document.getElementById("signal-nav");
 var signalTab = document.getElementById("signal-tab");
 var signalDiv = document.getElementById("signal");
 
+var speed = 0;
 
 for(let i = 0; i < 100; i++){
     Z[i] = math.complex(Math.cos(Math.PI * (i/100)), Math.sin(Math.PI * (i/100)));
@@ -125,7 +133,6 @@ function clearAllPoints() {
     drawZplane(poles, zeros);
 }
 
-
 // Draw magnitude & phase response
 function drawResponse(){
 
@@ -197,6 +204,7 @@ function drawResponse(){
     plotLoadedData();
 }
 
+// Plot loaded data
 function plotLoadedData(){
 
     var originalData = {
@@ -215,17 +223,7 @@ function plotLoadedData(){
     Plotly.newPlot('original-signal-plot', [originalData], originalLayout);
 }
 
-
-async function sendToServer(url = '', data = {}) {
-    var response = await fetch(url, {
-        method: 'POST',
-        mode: "cors",
-        body: JSON.stringify(data),
-    })
-
-    return response.json()
-}
-
+// Plot filtered data
 async function plotFilteredData(){
 
     infoDict = {
@@ -233,8 +231,6 @@ async function plotFilteredData(){
         "zeros": JSON.stringify(zeros),
         "poles": JSON.stringify(poles)
     };
-
-    console.log(infoDict)
 
     var { 'filteredData': yFilteredData } = await sendToServer(
         `${BASE_URL}/filter`, infoDict
@@ -253,39 +249,13 @@ async function plotFilteredData(){
         showlegend: true
     };  
     Plotly.newPlot('filtered-signal-plot', [filteredData], filteredLayout);
+
+    updateLoadedData()
+
 }
 
-function updatePlotData(){
-    var arrayLength = 30
-    var newArray = []
+function updateLoadedData(yData, speed){
 
-    for(var i = 0; i < arrayLength; i++) {
-        var y = Math.round(Math.random()*10) + 1
-        newArray[i] = y
-    }
-
-    Plotly.newPlot('myDiv', [{
-    y: newArray,
-    mode: 'lines',
-    line: {color: '#80CAF6'}
-    }]);
-
-    var cnt = 0;
-
-    var interval = setInterval(function() {
-
-    var y = Math.round(Math.random()*10) + 1
-    newArray = newArray.concat(y)
-    newArray.splice(0, 1)
-
-    var data_update = {
-        y: [newArray]
-    };
-
-    Plotly.update('myDiv', data_update)
-
-    if(++cnt === 100) clearInterval(interval);
-    }, 1000); 
 }
 
 // Draw Data
