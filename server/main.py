@@ -1,22 +1,25 @@
 # Imports
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, jsonify, request, json, render_template
 import json
-
-from pandas import array
 from filter import filterData
-
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+CORS(app)
+cors = CORS(app , resources={r"/*": {"origins": "*", "allow_headers": "*", "expose_headers": "*"}})
 
 """ Routes of Pages """
 # Home Page
 @app.route("/")
 def application():
-    return render_template("index.html")
+  return "Start"
 
-@app.route('/filter', methods=['POST'])
+@app.route("/filter", methods=["POST", "GET"])
+@cross_origin()
 def filter():
-    output = request.get_json()
+  
+  if request.method == 'POST':
+    output = json.loads(request.data)
     
     loadedData = json.loads(output['loadedData'])
     zerosLists = json.loads(output['zeros'])
@@ -33,8 +36,14 @@ def filter():
         poles.append(num)
 
     filteredData = filterData(loadedData, zeros, poles)
+    
+    filteredData = [complexNum.real for complexNum in filteredData]
+    responseData = {
+      'filteredData': filteredData
+    }
 
-    return 'filteredData'
+    return jsonify(responseData)
+
 
 # Run app
 if __name__ == "__main__":  

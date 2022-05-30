@@ -7,37 +7,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    
     <!-- JS -->
     <!-- Load plotly.js into the DOM -->
-	<script src="{{ url_for('static', filename='js/plotly-2.12.1.min.js') }}"></script>
+	<script src="js/plotly-2.12.1.min.js"></script>
      <!-- Math.js -->
-     <script src="{{ url_for('static', filename='./js/math.min.js') }}" type="text/javascript"></script>
-     <!-- Brython
-     <script src="js/brython.min.js"></script>
-     <script src="js/brython_stdlib.min.js"></script>
-     <script src="py/main.py" type="text/python" defer></script> -->
-     <!-- Icon -->
-    <link rel="icon" href="{{ url_for('static', filename='./images/icon.png') }}">
+     <script src="./js/math.min.js" type="text/javascript"></script>
 
-    <!-- Title -->
+     <!-- Title -->
     <title>Digital Filter Design</title>
+
+    <!-- Icon -->
+    <link rel="icon" href="./images/icon.png">
 </head>
 <body>
-
     <div class="container-fluid">
-        <nav >
+
+        <!-- Navbar Start -->
+        <nav>
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <a class="navbar-brand" href="/">DSP</a>
                 <li class="nav-item">
                     <a class="nav-link active" id="menu-tab" data-toggle="tab" href="#menu" role="tab" aria-controls="menu" aria-selected="true">Menu</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" id="home-nav">
                     <a class="nav-link" id="home-tab" data-toggle="tab" href="#zeros-poles" role="tab" aria-controls="zeros-poles" aria-selected="false">Zeros & Poles</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="filter-tab" data-toggle="tab" href="#filter" role="tab" aria-controls="filter" aria-selected="false">Filter</a>
+                    <a class="nav-link" id="filter-tab" data-toggle="tab" href="#filter" role="tab" aria-controls="filter" aria-selected="false">All Pass Filter</a>
                 </li>
                 <li class="nav-item hidden" id="signal-nav">
                     <a class="nav-link" id="signal-tab" data-toggle="tab" href="#signal" role="tab" aria-controls="signal" aria-selected="false">Signal</a>
@@ -46,19 +45,31 @@
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="menu" role="tabpanel" aria-labelledby="menu-tab">
                     <a id="submit-file" href="#" onclick="performClick('files');">
-                        <img  src="{{ url_for('static', filename='./images/browse.png') }}" alt="Browse" data-toggle="tooltip" data-placement="bottom" title="Open signal to filter" class="img-thumbnail imageMenu">     
+                        <img  src="./images/browse.png" alt="Browse" data-toggle="tooltip" data-placement="bottom" title="Open signal to filter" class="img-thumbnail imageMenu">     
                     </a>
                     <input type="file" id="files" hidden />
                 </div>
                 <div class="tab-pane fade" id="zeros-poles" role="tabpanel" aria-labelledby="#zeros-poles-tab">
                     <div class="row">
                         <div class="col-3">
-                            <a onclick="addNewZero()"><img src="{{ url_for('static', filename='./images/zero.png') }}" alt="zero" data-toggle="tooltip" data-placement="bottom" title="Add Zero" class="img-thumbnail imageMenu"></a>
-                            <a onclick="addNewPole()"><img src="{{ url_for('static', filename='./images/pole.png') }}" alt="pole" data-toggle="tooltip" data-placement="bottom" title="Add Pole" class="img-thumbnail imageMenu"></a>
-                            <a onclick="clearZeros()"><img src="{{ url_for('static', filename='./images/clearZeros.jpeg') }}" alt="Clear Zeros" data-toggle="tooltip" data-placement="bottom" title="Clear All Zeros" class="img-thumbnail imageMenu"></a>
-                            <a onclick="clearPoles()"><img src="{{ url_for('static', filename='./images/clearPoles.jpeg') }}" alt="Clear Poles" data-toggle="tooltip" data-placement="bottom" title="Clear All Poles" class="img-thumbnail imageMenu"></a>
-                            <a onclick="clearAllPoints()"><img src="{{ url_for('static', filename='./images/clearAll.png') }}" alt="Clear All" data-toggle="tooltip" data-placement="bottom" title="Clear All" class="img-thumbnail imageMenu"></a>
-                            <!-- <a onclick="addNewPole()"><img src="{{ url_for('static', filename='./images/delete.png') }}" alt="Delete" data-toggle="tooltip" data-placement="bottom" title="Delete" class="img-thumbnail imageMenu"></a> -->
+                            <a href="#" onclick="addNewZero()">
+                                <img src="./images/zero.png" alt="zero" data-toggle="tooltip" data-placement="bottom" title="Add Zero" class="img-thumbnail imageMenu">
+                            </a>
+                            <a href="#" onclick="addNewPole()">
+                                <img src="./images/pole.png" alt="pole" data-toggle="tooltip" data-placement="bottom" title="Add Pole" class="img-thumbnail imageMenu">
+                            </a>
+                            <a href="#" onclick="clearZeros()">
+                                <img src="./images/clearZeros.jpeg" alt="Clear Zeros" data-toggle="tooltip" data-placement="bottom" title="Clear All Zeros" class="img-thumbnail imageMenu">
+                            </a>
+                            <a href="#" onclick="clearPoles()">
+                                <img src="./images/clearPoles.jpeg" alt="Clear Poles" data-toggle="tooltip" data-placement="bottom" title="Clear All Poles" class="img-thumbnail imageMenu">
+                            </a>
+                            <a href="#" onclick="clearAllPoints()">
+                                <img src="./images/clearAll.png" alt="Clear All" data-toggle="tooltip" data-placement="bottom" title="Clear All" class="img-thumbnail imageMenu">
+                            </a>
+                            <a href="#" onclick="addNewPole()">
+                                <img src="./images/delete.png" alt="Delete" data-toggle="tooltip" data-placement="bottom" title="Delete" class="img-thumbnail imageMenu">
+                            </a>
                         </div>
                         <div class="col-2 form-check">
                             <input class="form-check-input" type="checkbox" value="Conjugate" id="conjugate" />
@@ -79,18 +90,27 @@
                 </div>
                 <div class="tab-pane fade" id="signal" role="tabpanel" aria-labelledby="#signal-tab">
                     <div class="Item">
-                        <div>
-                            <label for="speedSignal">Speed : </label> 
-                            <input type="range" class="form-range" min="0" max="10" step="1" id="speedSignal"> 
-                            <label for="speedSignal">50%</label> 
-                        </div>   
+                        <table>
+                            <tr>
+                                <td>
+                                    <a onclick="plotFilteredData()" href="#">
+                                        <img src="./images/filter.png" alt="Filter" data-toggle="tooltip" data-placement="bottom" title="Filter the signal" class="img-thumbnail imageMenu">
+                                    </a>
+                                </td>
+                                <td><label class="ml-3 mr-1" for="speedSignal">Speed: </label></td>
+                                <td><input type="range" class="form-range" min="0" max="10" step="1" id="speedSignal"> </td>
+                                <td><label id="speedLabel" for="speedSignal">50%</label></td>
+                            </tr>
+                        </table>   
                     </div>
                 </div>
             </div>
         </nav>
+        <!-- Navbar End -->
 
         <hr>            
         
+        <!-- Z plane div Start -->
         <div class="row big-plane">
             <div class="col-12 plane">
                 <h3>Z Plane</h3>
@@ -99,9 +119,11 @@
                 <div id="poles"></div>
             </div>
         </div>
+        <!-- Z plane div End -->
 
         <hr>
         
+        <!-- Responese div Start -->
         <div class="row response-plane">
             <div class="col-6 plane">
                 <div class="plot" id="magnitude-plot"></div>
@@ -110,9 +132,11 @@
                 <div class="plot" id="phase-plot"></div>
             </div>
         </div>
+        <!-- Responese div End -->
 
         <hr>
 
+        <!-- Loaded Signal div Start -->
         <div class="row">
             <div class="col-6">
                 <div id="original-signal-plot"></div>
@@ -121,16 +145,22 @@
                 <div id="filtered-signal-plot"></div>
             </div>
         </div>
+        <!-- Loaded Signal div End -->
+
     </div>
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="{{ url_for('static', filename='./js/jquery-3.2.1.slim.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/papaparse.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='./js/popper.min.js') }}" ></script>
-    <script src="{{ url_for('static', filename='./js/bootstrap.min.js') }}"></script>
+    <script src="./js/jquery-3.2.1.slim.min.js"></script>
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/papaparse.min.js"></script>
+    <script src="./js/popper.min.js" ></script>
+    <script src="./js/bootstrap.min.js"></script>
         
     <!-- My script javascript file -->
-    <script src="{{ url_for('static', filename='./js/script.js') }}"></script>
+    <script src="./js/additions.js"></script>
+    <script src="./js/plotter.js"></script>
+    <script src="./js/zPlane.js"></script>
+    <script src="./js/mouse.js"></script>
+
 </body>
 </html>
