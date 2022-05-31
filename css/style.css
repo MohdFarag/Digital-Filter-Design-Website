@@ -28,8 +28,8 @@ hr{
 }
 
 .imageMenu{
-    width: 70px;
-    height: 70px;
+    width: 66px;
+    height: 66px;
 }
 
 .tab-content{
@@ -89,3 +89,26 @@ hr{
     font-size: 16px;
     color: rgb(0 124 207);
   }
+
+.axis path,
+.axis line {
+ color: darkgray;
+}
+
+.passInput{
+    width: 100px;
+    margin-right: 5px;
+    padding: 3px;
+    height: 35px;
+}
+.passSubmit{
+    height: 35px;
+}
+
+.form-label-pass{
+    font-size: 20px;
+    padding: 0 13px;
+    font-family: inherit;
+    margin-left: -7px;
+    font-weight: bold;
+}

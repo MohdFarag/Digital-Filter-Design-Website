@@ -33,8 +33,8 @@ phaseResponse = new Array
 
 
 //  Variables for mag and phase responses
-var Z = new Array(100);
-var freqAxis = new Array(100);
+var Z = new Array(50);
+var freqAxis = new Array(50);
 
 var homeNav = document.getElementById("home-nav")
 var homeTab = document.getElementById("menu-tab")
@@ -46,9 +46,88 @@ var signalDiv = document.getElementById("signal");
 
 var speed = 0;
 
-for(let i = 0; i < 100; i++){
-    Z[i] = math.complex(Math.cos(Math.PI * (i/100)), Math.sin(Math.PI * (i/100)));
-    freqAxis[i] = Math.PI * (i/100);
+for(let i = 0; i < 50; i++){
+    Z[i] = math.complex(Math.cos(Math.PI * (i/50)), Math.sin(Math.PI * (i/50)));
+    freqAxis[i] = (Math.PI * (i/50)).toFixed(2);
+}
+
+// Plot for responses
+class Plot {
+    constructor(w, h) {
+        this.width = w;
+        this.height = h;
+    }
+
+    plot = (x1, y1, x2, y2, label1, label2) => {
+        this.freq = d3.select("#plot1").append("div")
+            .attr("id", "freqResp")
+            .attr("style",`position: relative;margin: auto;height: ${this.height}px`)
+        this.canvas = d3.select("#freqResp").append("canvas")
+            .attr("id", "myChart1");
+
+        this.phase = d3.select("#plot2").append("div")
+            .attr("id", "phaseResp")
+            .attr("style",`position: relative;margin: auto;height: ${this.height}px`)
+        this.canvas = d3.select("#phaseResp").append("canvas")
+            .attr("id", "myChart2");
+
+        this.ctx1 = document.getElementById('myChart1');
+        this.ctx2 = document.getElementById('myChart2');
+
+        let data1 = {
+            labels: x1,
+            datasets: [{
+                label: label1,
+                data: y1,
+                fill: false,
+                borderColor: '#1191ed'
+            }]
+        }
+
+        let data2 = {
+            labels: x2,
+            datasets: [{
+                label: label2,
+                data: y2,
+                fill: false,
+                borderColor: '#3d11ed'
+            }]
+        }
+
+        let options = {
+            maintainAspectRatio: false,
+            animation: false,
+            scales : {
+                x : {
+                    ticks : {
+                        sampleSize : 5
+                    }
+                }
+                
+            }
+
+        }
+        var myChart1 = new Chart(this.ctx1, {
+            type: 'line',
+            options: options,
+            data: data1
+        });
+
+        var myChart2 = new Chart(this.ctx2, {
+            type: 'line',
+            options: options,
+            data: data2
+        });
+
+        return {myChart1 , myChart2 };
+    }
+    
+    destroy = () => {
+        d3.select("#myChart1").remove();
+        d3.select("#freqResp").remove()
+        d3.select("#myChart2").remove();
+        d3.select("#phaseResp").remove()
+    }
 }
 
 // Get the click on browse
@@ -113,33 +192,20 @@ function convertData(results){
     plotLoadedData();
 }
 
-// Clear all points
-function clearAllPoints() {
-
-    for (let i = 0; i < zerosNumber; i++) {
-        var zeroDiv = document.getElementById('zero-' + i);
-        zeroDiv.remove();
-    }
-
-    for (let i = 0; i < polesNumber; i++) {
-        var poleDiv = document.getElementById('pole-' + i);
-        poleDiv.remove();
-    }
-
-    poles = [];
-    zeros = [];
-    polesNumber = 0;
-    zerosNumber = 0;
-    drawZplane(poles, zeros);
-}
 
 // Draw magnitude & phase response
 function drawResponse(){
+    
+    plt.destroy();
+    
+    let poles = zplane.get_poles();
+    let zeros = zplane.get_zeros();
+    let allPass = zplane.get_allPass();
 
     magResponse = [];
     phaseResponse = [];
 
-    for(let i = 0; i < 100; i++){
+    for(let i = 0; i < 50; i++){
 
         let magPoint = math.complex(1,0); // Initial value (1+0j)
         let phasePoint = math.complex(1,0); // Initial value (1+0j)
@@ -171,42 +237,13 @@ function drawResponse(){
         magResponse.push(magPoint);
         phaseResponse.push(phasePoint);
     }
-    
-    var magnitudeData = {
-        x: freqAxis,
-        y: magResponse,
-        type: 'scatter',
-        name:'magnitude response',
-        line: {shape: 'spline'}
-        };
-    
-    var layoutMagnitude = {
-        title: 'Magnitude response',
-        showlegend: true
-    };
 
-    var phaseData = {
-        x: freqAxis,
-        y: phaseResponse,
-        type: 'scatter',
-        name:'phase response',
-        line: {shape: 'spline'}
-    };
+    charts = plt.plot(freqAxis, magResponse, freqAxis, phaseResponse, "Magnitude", "Phase");
 
-    var layoutPhase = {
-        title: 'Phase response',
-        showlegend: true
-    };
-    
-    Plotly.newPlot('magnitude-plot', [magnitudeData], layoutMagnitude);
-    Plotly.newPlot('phase-plot', [phaseData], layoutPhase);
-
-    plotLoadedData();
 }
 
 // Plot loaded data
 function plotLoadedData(){
-
     var originalData = {
         x: xloadedData,
         y: yloadedData,
@@ -214,18 +251,19 @@ function plotLoadedData(){
         name:'Your Data',
         line: {shape: 'spline'}
         };
-    
-    var originalLayout = {
-        title: 'Your Data',
-        showlegend: true
-    };
-            
-    Plotly.newPlot('original-signal-plot', [originalData], originalLayout);
+       
+    Plotly.newPlot('original-signal-plot', [originalData]);
 }
 
 // Plot filtered data
 async function plotFilteredData(){
 
+    let poles = zplane.get_poles();
+    let zeros = zplane.get_zeros();
+
+    console.log(poles)
+    console.log(zeros)
+    
     infoDict = {
         "loadedData": JSON.stringify(yloadedData),
         "zeros": JSON.stringify(zeros),
@@ -244,20 +282,28 @@ async function plotFilteredData(){
         line: {shape: 'spline'}
     };
 
-    var filteredLayout = {
-        title: 'Filtered Data',
-        showlegend: true
-    };  
-    Plotly.newPlot('filtered-signal-plot', [filteredData], filteredLayout);
-
-    updateLoadedData()
-
+    Plotly.newPlot('filtered-signal-plot', [filteredData]);
 }
 
 function updateLoadedData(yData, speed){
 
 }
 
-// Draw Data
-plotLoadedData();
-plotFilteredData();
+function plotFirstTime(title,divId){
+    var Data = {
+        y: [1,1,1,1,1,1,1,1,1,1,1,1],
+        type: 'scatter',
+        name: title,
+        line: {shape: 'spline'}
+        };
+    
+    var Layout = {
+        title: title,
+        showlegend: true
+    };
+            
+    Plotly.newPlot(divId, [Data], Layout);
+}
+
+plotFirstTime('Magnitude Response', 'original-signal-plot');
+plotFirstTime('Filtered Data', 'filtered-signal-plot');
