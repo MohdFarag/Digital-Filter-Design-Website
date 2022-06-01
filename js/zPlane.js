@@ -468,7 +468,6 @@ class Zplane {
                     this.dataSet.splice(pIndex, 1);
                     this.dataSet.splice(conIndex, 1);
                     document.querySelectorAll(".point").forEach(node => {
-                        //console.log(node.getAttribute("xPlan"),point[0]);
                         if (parseFloat(node.getAttribute("xPlan")) === point[0] &&
                             parseFloat(node.getAttribute("yPlan")) === point[1]) {
                             console.log("here");

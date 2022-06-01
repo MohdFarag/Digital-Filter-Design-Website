@@ -209,6 +209,8 @@ function drawResponse(){
     let zeros = zplane.get_zeros();
     let allPass = zplane.get_allPass();
 
+    console.table(allPass);
+
     magResponse = [];
     phaseResponse = [];
 
@@ -219,26 +221,30 @@ function drawResponse(){
 
         // Calc. zeros
         for(let j = 0; j < zeros.length; j++){
+            let temp = math.subtract(Z[i], math.complex(zeros[j][0], zeros[j][1]));
             if(!(inRange(zeros[j][0], -0.01, 0.01) && inRange(zeros[j][1], -0.01, 0.01))){
-                let temp = math.subtract(Z[i], math.complex(zeros[j][0], zeros[j][1]));
                 magPoint *= temp.abs();
-                phasePoint *= temp.arg();
             }else{
                 magPoint *= 1;
-                phasePoint *= 1;
             }
+            phasePoint *= temp.arg();
         }
         
         // Calc. poles
         for(let j = 0; j < poles.length; j++){
+            let temp = math.subtract(Z[i], math.complex(poles[j][0], poles[j][1]));
             if(!(inRange(poles[j][0], -0.01, 0.01) && inRange(poles[j][1], -0.01, 0.01))){                
-                let temp = math.subtract(Z[i], math.complex(poles[j][0], poles[j][1]));
                 magPoint /= temp.abs();
-                phasePoint /= temp.arg();
             }else{
                 magPoint /= 1;
-                phasePoint /= 1;
             }
+            phasePoint /= temp.arg();
+        }
+
+        // Calc. AllPass
+        for(let j = 0; j < allPass.length; j++){                           
+            let temp = math.subtract(Z[i], math.complex(allPass[j][0], allPass[j][1]));
+            phasePoint /= temp.arg();
         }
 
         magResponse.push(magPoint);
@@ -262,22 +268,14 @@ const drawResponseOfAllPass = () => {
 
         // Calc. zeros
         for(let j = 0; j < zeros.length; j++){
-            if(!(inRange(zeros[j][0], -0.01, 0.01) && inRange(zeros[j][1], -0.01, 0.01))){
-                let temp = math.subtract(Z[i], math.complex(zeros[j][0], zeros[j][1]));
-                phasePoint *= temp.arg();
-            }else{
-                phasePoint *= 1;
-            }
+            let temp = math.subtract(Z[i], math.complex(zeros[j][0], zeros[j][1]));
+            phasePoint *= temp.arg();
         }
         
         // Calc. poles
         for(let j = 0; j < poles.length; j++){
-            if(!(inRange(poles[j][0], -0.01, 0.01) && inRange(poles[j][1], -0.01, 0.01))){                
-                let temp = math.subtract(Z[i], math.complex(poles[j][0], poles[j][1]));
-                phasePoint /= temp.arg();
-            }else{
-                phasePoint /= 1;
-            }
+            let temp = math.subtract(Z[i], math.complex(poles[j][0], poles[j][1]));
+            phasePoint /= temp.arg();
         }
 
         phaseResponse.push(phasePoint);

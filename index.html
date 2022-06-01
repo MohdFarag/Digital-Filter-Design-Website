@@ -83,23 +83,21 @@
                     <div id="allPass-filter-menu" class="row container-fluid">
                         <div id="form-add-pass" class="col-4 form-check form-check-inline">
                             <div class="row">
-                                <div class="col-8">
+                                <div class="col-12">
                                     <input class="passInput" type="text" placeholder="real" name="passReal" />
                                     <label class="form-label-pass"> + </label>
                                     <input class="passInput" type="text" placeholder="imag" name="passImag" />
                                     <label class="form-label-pass">j</label>
-                                    <button onclick="addNewPassFilter()" style="margin-right: 10px;" class="passSubmit btn btn-primary" type="submit">Use</button>
-                                </div>
-                                <div class="col-4">
-                                    <input class="form-check-input" type="checkbox" value="With All Pass Filter" id="passFilter" />
-                                    <label class="form-check-label" for="passFilter">All Pass Filter</label>
+                                    <button onclick="addNewPassFilter()" style="margin-right: 10px;" class="passSubmit btn btn-primary" type="submit">Add</button>
                                 </div>
                             </div>
                         </div>
                         <!-- canvas -->
                         <div style="max-height: 600px;" class="h-auto offcanvas offcanvas-top" id="all-pass-canvas">
                             <div class="offcanvas-header">
-                                <h1 class="offcanvas-title">Preveiw All Pass</h1>
+                                <h1 class="offcanvas-title">Preveiw All Pass 
+                                    <button type="button" class="btn btn-primary" name="useAllPass" id="useAllPass">Use AllPass</button>
+                                </h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
                             </div>
                             <div class="offcanvas-body">

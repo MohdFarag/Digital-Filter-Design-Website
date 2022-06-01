@@ -1,20 +1,19 @@
 // Draw Z plane
 let zplane = new Zplane(350, 350, "circle");
+// Your beautiful D3 code will go here
+zplane.plot_axis();
 
 // Draw Z plane
 let zplane_allPass = new Zplane(300, 300, "circle-all-pass");
-
-let allPassValues = [];
-
 // Your beautiful D3 code will go here
-zplane.plot_axis();
 zplane_allPass.plot_axis();
 
+// Draw Plot
 let plt = new Plot(250, 250);
 // update plot 
 let charts = plt.plot([], [], [], [], "Magnitude", "Phase");
 
-// Zeros & Poles
+// Get Zeros & Poles
 zeros = zplane.get_zeros() // Zeros positions array
 var zerosNumber = 0;
 
@@ -23,6 +22,7 @@ var polesNumber = 0;
 
 var allPassFilter = [[1,0.5],[0.5,1],[1, 1],[-0.75,0.9]] // Default Values
 
+// Add Point
 const addPoint = (type) => {
     let re = 0;
     let im = 0;
@@ -79,6 +79,8 @@ const addAllPassFiltersList = () => {
     }
 }
 
+let useAllPassButton = document.getElementsByName(`useAllPass`)[0];
+
 const addPassFilter = (i, real, imag ) => {
 
     allPassFilterMenu = document.getElementById("allPass-filter-menu");
@@ -124,10 +126,12 @@ const addPassFilter = (i, real, imag ) => {
         re = allPassFilter[i][0];
         im = allPassFilter[i][1];
 
-        a = math.complex(re,im);
+        a = math.complex(re, im);
 
         let zero = math.divide(math.complex(1, 0), math.conj(a));
         let pole = a;
+
+        useAllPassButton.id = `useAllPass-${i}` 
         
         zplane_allPass.add_point([pole.re, pole.im], zplane_allPass.types.nonConjPole);
         zplane_allPass.add_point([zero.re, zero.im], zplane_allPass.types.nonConjZero);
@@ -144,6 +148,14 @@ const addPassFilter = (i, real, imag ) => {
         }
     });
 }
+
+// Click in use button
+useAllPassButton.addEventListener('click', event => {
+    var id = useAllPassButton.id
+    i = Number(id[id.length-1])
+    zplane.add_point([allPassFilter[i][0], allPassFilter[i][1]], zplane.types.allPass);
+    drawResponse();
+});
 
 const addNewPassFilter = () =>{
 
@@ -168,7 +180,8 @@ const addNewPassFilter = () =>{
 
 const myOffcanvas = document.getElementById('all-pass-canvas')
 myOffcanvas.addEventListener('hidden.bs.offcanvas', event => {
-    zplane_allPass.delete_all()
+    zplane_allPass.dataSet = [];
+    d3.select("#all-pass-canvas").selectAll(".point").data(zplane_allPass.dataSet).exit().remove();
 })
 
 addAllPassFiltersList()
