@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     
     <!-- JS -->
@@ -72,9 +72,6 @@
                             <a href="#" onclick="delete_all()">
                                 <img src="./images/clearAll.png" alt="Clear All" data-toggle="tooltip" data-placement="bottom" title="Clear All" class="img-thumbnail imageMenu">
                             </a>
-                            <a href="#" onclick="addNewPole()">
-                                <img src="./images/delete.png" alt="Delete" data-toggle="tooltip" data-placement="bottom" title="Delete" class="img-thumbnail imageMenu">
-                            </a>
                         </div>
                         <div class="col-2 form-check">
                             <input class="form-check-input" type="checkbox" value="Conjugate" id="conjugate" />
@@ -84,14 +81,37 @@
                 </div>
                 <div class="tab-pane fade" id="filter" role="tabpanel" aria-labelledby="#filter-tab">
                     <div id="allPass-filter-menu" class="row container-fluid">
-                        <div id="form-add-pass" class="col-3 form-check form-check-inline">
-                            <input class="passInput" type="text" placeholder="real" name="passReal" />
-                            <label class="form-label-pass"> + </label>
-                            <input class="passInput" type="text" placeholder="imag" name="passImag" />
-                            <label class="form-label-pass">j</label>
-                            <button onclick="addNewPassFilter()" style="margin-right: 10px;" class="passSubmit btn btn-primary" type="submit">Use</button>
-                            <input class="form-check-input" type="checkbox" value="With All Pass Filter" id="passFilter" />
-                            <label class="form-check-label" for="passFilter">All Pass Filter</label>
+                        <div id="form-add-pass" class="col-4 form-check form-check-inline">
+                            <div class="row">
+                                <div class="col-8">
+                                    <input class="passInput" type="text" placeholder="real" name="passReal" />
+                                    <label class="form-label-pass"> + </label>
+                                    <input class="passInput" type="text" placeholder="imag" name="passImag" />
+                                    <label class="form-label-pass">j</label>
+                                    <button onclick="addNewPassFilter()" style="margin-right: 10px;" class="passSubmit btn btn-primary" type="submit">Use</button>
+                                </div>
+                                <div class="col-4">
+                                    <input class="form-check-input" type="checkbox" value="With All Pass Filter" id="passFilter" />
+                                    <label class="form-check-label" for="passFilter">All Pass Filter</label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- canvas -->
+                        <div style="max-height: 600px;" class="h-auto offcanvas offcanvas-top" id="all-pass-canvas">
+                            <div class="offcanvas-header">
+                                <h1 class="offcanvas-title">Preveiw All Pass</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+                            </div>
+                            <div class="offcanvas-body">
+                                <div class="row">
+                                    <div id="circle-all-pass" class="col-5 plane m-sm-5">
+                                        <h3>Z Plane</h3>
+                                    </div>
+                                    <div class="col-6 response-plane">
+                                        <div id="allpass-signal-plot"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -110,7 +130,7 @@
                             </td>
                             <td><label class="ml-3 mr-1 speedLabel" for="speedSignal">Speed: </label></td>
                             <td>                                    
-                                <input type="range" class="slider form-range" min="0" max="100" step="1" id="speedSignal">
+                                <input type="range" class="slider form-range" min="0" max="200" step="1" id="speedSignal">
                             </td>
                             <td><label class="ml-1 speedLabel" id="speedLabel" for="speedSignal">50</label></td>
                         </tr>
@@ -126,7 +146,7 @@
             <!-- Z plane div Start -->
             <div class="col-6 plane">
                 <h3>Z Plane</h3>
-                <div id="circle" class="col  m-sm-5">
+                <div id="circle" class="col m-sm-5">
                     <div class="row">
                         <div class="col">
                             <h6>Current real : <span id="current_x"></span></h6>
@@ -157,6 +177,12 @@
 
         <!-- Loaded Signal div Start -->
         <div class="row">
+            <div id="running" class="col-12 hidden alert alert-danger d-flex align-items-center" role="alert">
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                <div>
+                  Wait until the running signal finished !
+                </div>
+            </div>
             <div class="col-6">
                 <div id="original-signal-plot"></div>
             </div>
@@ -165,15 +191,27 @@
             </div>
         </div>
         <!-- Loaded Signal div End -->
-
     </div>
 
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!-- Footer Start -->
+    <footer class="bg-light text-center text-lg-start">
+        <!-- Copyright -->
+        <div class="text-center p-3" style="background-color: rgba(122, 206, 255, 0.227);">
+          © 2022 Copyright -
+          <a class="text-dark" >Mohamed Ahmed Abdullah Mahmoud</a>
+        </div>
+        <!-- Copyright -->
+    </footer>
+    <!-- Footer End -->
+
+    <!-- jQuery first -->
     <script src="./js/jquery-3.2.1.slim.min.js"></script>
     <script src="./js/jquery.min.js"></script>
     <script src="./js/papaparse.min.js"></script>
-    <script src="./js/popper.min.js" ></script>
+    <!-- Then Popper.js, then Bootstrap JS -->
+    <script src="./js/popper.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/bootstrap.bundle.min.js"></script>
         
     <!-- My script javascript file -->
     <script src="./js/server.js"></script>

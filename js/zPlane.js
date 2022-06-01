@@ -1,7 +1,7 @@
 class Zplane {
 
     // Constructor => needs width and height
-    constructor(width, height) {
+    constructor(width, height, id) {
         
         // Equation x**2 + y**2 = 1
         this.w = width;
@@ -15,7 +15,7 @@ class Zplane {
         this.middlePointOf_y = height / 2;
 
         // add svg element 
-        this.svg = d3.select("#circle")
+        this.svg = d3.select(`#${id}`)
             .append("svg")
             .attr("width", width)
             .attr("height", height)

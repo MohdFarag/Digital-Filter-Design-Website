@@ -8,11 +8,6 @@ var slider = document.getElementById("speedSignal");
 var speedLabel = document.getElementById("speedLabel");
 speedLabel.innerHTML = slider.value; // Display the default slider value
 
-// Update the current slider value (each time you drag the slider handle)
-slider.oninput = function() {
-    speedLabel.innerHTML = this.value;
-}
-
 // Magnitude plot
 var $magnitudePlot = $("#magnitude-plot");
 // Phase plot
@@ -36,6 +31,17 @@ phaseResponse = new Array
 var Z = new Array(50);
 var freqAxis = new Array(50);
 
+for(let i = 0; i < 50; i++){
+    Z[i] = math.complex(Math.cos(Math.PI * (i/50)), Math.sin(Math.PI * (i/50)));
+    freqAxis[i] = (Math.PI * (i/50)).toFixed(2);
+}
+
+unitArr = new Array
+
+for (let i = 0; i < 1000; i++) {
+    unitArr.push(1);
+}
+
 var homeNav = document.getElementById("home-nav")
 var homeTab = document.getElementById("menu-tab")
 var menuDiv = document.getElementById("menu")
@@ -44,11 +50,13 @@ var signalNav = document.getElementById("signal-nav");
 var signalTab = document.getElementById("signal-tab");
 var signalDiv = document.getElementById("signal");
 
-var speed = 0;
+var speed = 100;
+var running = false;
 
-for(let i = 0; i < 50; i++){
-    Z[i] = math.complex(Math.cos(Math.PI * (i/50)), Math.sin(Math.PI * (i/50)));
-    freqAxis[i] = (Math.PI * (i/50)).toFixed(2);
+// Update the current slider value (each time you drag the slider handle)
+slider.oninput = function() {
+    speedLabel.innerHTML = this.value;
+    speed = this.value;
 }
 
 // Plot for responses
@@ -192,7 +200,6 @@ function convertData(results){
     plotLoadedData();
 }
 
-
 // Draw magnitude & phase response
 function drawResponse(){
     
@@ -242,6 +249,57 @@ function drawResponse(){
 
 }
 
+const drawResponseOfAllPass = () => {
+    let poles = zplane_allPass.get_poles();
+    let zeros = zplane_allPass.get_zeros();
+
+    phaseResponse = [];
+
+
+    for(let i = 0; i < 50; i++){
+
+        let phasePoint = math.complex(1,0); // Initial value (1+0j)
+
+        // Calc. zeros
+        for(let j = 0; j < zeros.length; j++){
+            if(!(inRange(zeros[j][0], -0.01, 0.01) && inRange(zeros[j][1], -0.01, 0.01))){
+                let temp = math.subtract(Z[i], math.complex(zeros[j][0], zeros[j][1]));
+                phasePoint *= temp.arg();
+            }else{
+                phasePoint *= 1;
+            }
+        }
+        
+        // Calc. poles
+        for(let j = 0; j < poles.length; j++){
+            if(!(inRange(poles[j][0], -0.01, 0.01) && inRange(poles[j][1], -0.01, 0.01))){                
+                let temp = math.subtract(Z[i], math.complex(poles[j][0], poles[j][1]));
+                phasePoint /= temp.arg();
+            }else{
+                phasePoint /= 1;
+            }
+        }
+
+        phaseResponse.push(phasePoint);
+    }
+
+    var allPassData = {
+        x: freqAxis,
+        y: phaseResponse,
+        type: 'scatter',
+        name: 'AllPass',
+        line: {shape: 'spline'}
+    };
+
+    var Layout = {
+        title: 'AllPass',
+        showlegend: true
+    };
+       
+    Plotly.newPlot('allpass-signal-plot', [allPassData], Layout);
+
+}
+
 // Plot loaded data
 function plotLoadedData(){
     var originalData = {
@@ -255,14 +313,11 @@ function plotLoadedData(){
     Plotly.newPlot('original-signal-plot', [originalData]);
 }
 
-// Plot filtered data
-async function plotFilteredData(){
-
+// Get filtered data
+async function getFilteredData(){
+    // Get zeros & poles
     let poles = zplane.get_poles();
     let zeros = zplane.get_zeros();
-
-    console.log(poles)
-    console.log(zeros)
     
     infoDict = {
         "loadedData": JSON.stringify(yloadedData),
@@ -274,24 +329,80 @@ async function plotFilteredData(){
         `${BASE_URL}/filter`, infoDict
     );
 
-    var filteredData = {
-        x: xloadedData,
-        y: yFilteredData,
-        type: 'scatter',
-        name:'Filtered Data',
-        line: {shape: 'spline'}
-    };
-
-    Plotly.newPlot('filtered-signal-plot', [filteredData]);
+    return yFilteredData
 }
 
-function updateLoadedData(yData, speed){
+// Plot filtered data
+async function plotFilteredData(){
+
+    yFilteredData = await getFilteredData();
+    
+    if (!running) {
+        Plotly.newPlot('original-signal-plot', [{
+            y: [yloadedData[0]],
+            mode: 'lines',
+            line: {color: '#80CAF6'}
+        }]);
+    
+        Plotly.newPlot('filtered-signal-plot', [{
+            y: [yFilteredData[0]],
+            mode: 'lines',
+            line: {color: '#80CAF6'}
+        }]);
+        updateData(yloadedData, yFilteredData, 50);
+        document.getElementById("running").classList.add("hidden")
+    }else{
+        document.getElementById("running").classList.remove("hidden")
+    }
+}
+
+function updateData(yOriginal, yFiltered, lengthStart){    
+    running = true;
+    slider.disabled = true;
+
+    var cnt = 0;
+    var i = 1;
+
+    var interval = setInterval(function() {      
+        Plotly.extendTraces('original-signal-plot', {
+            y: [[yOriginal[i]]]
+        }, [0]);
+
+        Plotly.extendTraces('filtered-signal-plot', {
+            y: [[yFiltered[i]]]
+        }, [0]);
+
+        if (i <= yOriginal.length) {
+            cnt++;
+        }else{
+            clearInterval(interval);
+            running = false;
+            slider.disabled = false;
+        }
+        
+        if(cnt > lengthStart) {
+            Plotly.relayout('original-signal-plot',{
+                xaxis: {
+                    range: [cnt-lengthStart,cnt]
+                }
+            });
+
+            Plotly.relayout('filtered-signal-plot',{
+                xaxis: {
+                    range: [cnt-lengthStart,cnt]
+                }
+            });
+        };
+
+        i++;
+    }, speed);
 
 }
 
 function plotFirstTime(title,divId){
+
     var Data = {
-        y: [1,1,1,1,1,1,1,1,1,1,1,1],
+        y: unitArr,
         type: 'scatter',
         name: title,
         line: {shape: 'spline'}
@@ -307,3 +418,4 @@ function plotFirstTime(title,divId){
 
 plotFirstTime('Magnitude Response', 'original-signal-plot');
 plotFirstTime('Filtered Data', 'filtered-signal-plot');
+plotFirstTime('AllPass', 'allpass-signal-plot');

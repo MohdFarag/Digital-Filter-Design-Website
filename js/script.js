@@ -1,9 +1,14 @@
 // Draw Z plane
-let zplane = new Zplane(350, 350);
+let zplane = new Zplane(350, 350, "circle");
+
+// Draw Z plane
+let zplane_allPass = new Zplane(300, 300, "circle-all-pass");
 
 let allPassValues = [];
+
 // Your beautiful D3 code will go here
 zplane.plot_axis();
+zplane_allPass.plot_axis();
 
 let plt = new Plot(250, 250);
 // update plot 
@@ -16,8 +21,7 @@ var zerosNumber = 0;
 poles = zplane.get_poles() // Poles positions array
 var polesNumber = 0;
 
-var allPassFilter = [[1,0.5],[0.5,1],[0,0.5],[0.7,0]] // Default Values
-
+var allPassFilter = [[1,0.5],[0.5,1],[1, 1],[-0.75,0.9]] // Default Values
 
 const addPoint = (type) => {
     let re = 0;
@@ -81,20 +85,32 @@ const addPassFilter = (i, real, imag ) => {
     
     var newPassDiv = document.createElement('div');
     newPassDiv.classList.add('col-1');
+    newPassDiv.classList.add('passDiv');
 
     var newPasslink = document.createElement('a');
-    newPasslink.href = "#"
     newPasslink.id = `pass-${i}`;
+    newPasslink.href = "#all-pass-prev";
+    newPasslink.setAttribute("role","button");
+    newPasslink.setAttribute("data-bs-toggle","offcanvas");
+    newPasslink.setAttribute("data-bs-target","#all-pass-canvas");
+
     var newPassImg = document.createElement('img');
     newPassImg.src = './images/a.png';
     newPassImg.width = '43';
     newPassImg.height = '43';
     newPassImg.classList.add('img-thumbnail');
+    
     newPasslink.appendChild(newPassImg)
     
     var newPassLabel = document.createElement('label');
     newPassLabel.style = 'font-size: 23px;padding-left:5px';
-    newPassLabel.innerHTML = `${real}+${imag}j`
+    if (imag < 0) { 
+        
+        newPassLabel.innerHTML = `${real}-${-1*imag}j`
+    }else{
+        newPassLabel.innerHTML = `${real}+${imag}j`
+    }
+    
 
     newPassDiv.appendChild(newPasslink)
     newPassDiv.appendChild(newPassLabel)
@@ -104,20 +120,27 @@ const addPassFilter = (i, real, imag ) => {
     target.parentNode.insertBefore(newPassDiv, target)       
 
     newPasslink.addEventListener("click", function(){
+        
+        re = allPassFilter[i][0];
+        im = allPassFilter[i][1];
+
+        a = math.complex(re,im);
+
+        let zero = math.divide(math.complex(1, 0), math.conj(a));
+        let pole = a;
+        
+        zplane_allPass.add_point([pole.re, pole.im], zplane_allPass.types.nonConjPole);
+        zplane_allPass.add_point([zero.re, zero.im], zplane_allPass.types.nonConjZero);
+        drawResponseOfAllPass();
+        
         if (newPassImg.getAttribute('src') == "./images/a.png") {
             // Set style
-            newPassImg.src = "./images/ared.png";
-            newPassLabel.style.color = "red";
-            
-            real = allPassFilter[i][0]
-            imag = allPassFilter[i][1]
-
-            zplane.add_point([real, imag], zplane.types.allPass);
-            drawResponse();
-
+            // newPassImg.src = "./images/ared.png";
+            // newPassLabel.style.color = "red";
         }else{
-            newPassImg.src = "./images/a.png";
-            newPassLabel.style.color = "black";
+            // newPassImg.src = "./images/a.png";
+            // newPassLabel.style.color = "black";
+            // zplane_allPass.delete_all()
         }
     });
 }
@@ -141,8 +164,11 @@ const addNewPassFilter = () =>{
     
     // Add to Js list
     allPassFilter.push([passReal,passImag])
-
 }
 
+const myOffcanvas = document.getElementById('all-pass-canvas')
+myOffcanvas.addEventListener('hidden.bs.offcanvas', event => {
+    zplane_allPass.delete_all()
+})
 
 addAllPassFiltersList()
