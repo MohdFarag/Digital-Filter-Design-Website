@@ -50,7 +50,7 @@ var signalNav = document.getElementById("signal-nav");
 var signalTab = document.getElementById("signal-tab");
 var signalDiv = document.getElementById("signal");
 
-var speed = 100;
+var speed = 400;
 var running = false;
 
 // Update the current slider value (each time you drag the slider handle)

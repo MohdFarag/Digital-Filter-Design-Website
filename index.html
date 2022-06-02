@@ -31,7 +31,7 @@
     <div class="container-fluid">
 
         <!-- Navbar Start -->
-        <nav>
+        <nav class="fixed-top navbar-top">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <a class="navbar-brand" href="/">DSP</a>
                 <li class="nav-item">
@@ -50,7 +50,7 @@
             <div class="tab-content" id="myTabContent">
                 <div class=" container-fluid tab-pane fade show active" id="menu" role="tabpanel" aria-labelledby="menu-tab">
                     <a id="submit-file" href="#" onclick="performClick('files');">
-                        <img  src="./images/browse.png" alt="Browse" data-toggle="tooltip" data-placement="bottom" title="Open signal to filter" class="img-thumbnail imageMenu">     
+                        <img  src="./images/browse.png" alt="Browse" data-toggle="tooltip" data-placement="bottom" title="Open signal to filter" class="img-thumbnail imageMenu m-2">     
                     </a>
                     <input type="file" id="files" hidden />
                 </div>
@@ -58,19 +58,19 @@
                     <div class="row container-fluid">
                         <div class="col-3">
                             <a href="#" onclick="addPoint('Zero')">
-                                <img src="./images/zero.png" alt="zero" data-toggle="tooltip" data-placement="bottom" title="Add Zero" class="img-thumbnail imageMenu">
+                                <img src="./images/zero.png" alt="zero" data-toggle="tooltip" data-placement="bottom" title="Add Zero" class="img-thumbnail imageMenu m-2">
                             </a>
                             <a href="#" onclick="addPoint('Pole')">
-                                <img src="./images/pole.png" alt="pole" data-toggle="tooltip" data-placement="bottom" title="Add Pole" class="img-thumbnail imageMenu">
+                                <img src="./images/pole.png" alt="pole" data-toggle="tooltip" data-placement="bottom" title="Add Pole" class="img-thumbnail imageMenu m-2">
                             </a>
                             <a href="#" onclick="delete_zeros()">
-                                <img src="./images/clearZeros.jpeg" alt="Clear Zeros" data-toggle="tooltip" data-placement="bottom" title="Clear All Zeros" class="img-thumbnail imageMenu">
+                                <img src="./images/clearZeros.jpeg" alt="Clear Zeros" data-toggle="tooltip" data-placement="bottom" title="Clear All Zeros" class="img-thumbnail imageMenu m-2">
                             </a>
                             <a href="#" onclick="delete_poles()">
-                                <img src="./images/clearPoles.jpeg" alt="Clear Poles" data-toggle="tooltip" data-placement="bottom" title="Clear All Poles" class="img-thumbnail imageMenu">
+                                <img src="./images/clearPoles.jpeg" alt="Clear Poles" data-toggle="tooltip" data-placement="bottom" title="Clear All Poles" class="img-thumbnail imageMenu m-2">
                             </a>
                             <a href="#" onclick="delete_all()">
-                                <img src="./images/clearAll.png" alt="Clear All" data-toggle="tooltip" data-placement="bottom" title="Clear All" class="img-thumbnail imageMenu">
+                                <img src="./images/clearAll.png" alt="Clear All" data-toggle="tooltip" data-placement="bottom" title="Clear All" class="img-thumbnail imageMenu m-2">
                             </a>
                         </div>
                         <div class="col-2 form-check">
@@ -123,12 +123,12 @@
                                         data-toggle="tooltip" 
                                         data-placement="bottom" 
                                         title="Filter the signal" 
-                                        class="img-thumbnail imageMenu" />
+                                        class="img-thumbnail imageMenu m-2" />
                                 </a>
                             </td>
                             <td><label class="ml-3 mr-1 speedLabel" for="speedSignal">Speed: </label></td>
                             <td>                                    
-                                <input type="range" class="slider form-range" min="0" max="200" step="1" id="speedSignal">
+                                <input type="range" class="slider form-range" value="400" min="10" max="1000" step="1" id="speedSignal">
                             </td>
                             <td><label class="ml-1 speedLabel" id="speedLabel" for="speedSignal">50</label></td>
                         </tr>
@@ -137,8 +137,6 @@
             </div>
         </nav>
         <!-- Navbar End -->
-
-        <hr>            
         
         <div class="row big-plane">
             <!-- Z plane div Start -->

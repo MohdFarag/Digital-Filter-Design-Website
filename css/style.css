@@ -13,8 +13,8 @@ hr{
 
 .big-plane{
     background: url(../images/bgUp0.png) no-repeat;
-    margin-top: -16px;
-    padding-top: 50px;
+    margin-top: 110px;
+    padding-top: 30px;
 }
 
 .plane{
@@ -28,8 +28,14 @@ hr{
 }
 
 .imageMenu{
-    width: 66px;
-    height: 66px;
+    width: 55px;
+    height: 55px;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+.tab-pane a{
+    text-decoration: none;
 }
 
 .tab-content{
@@ -115,4 +121,11 @@ hr{
 
 .passDiv {
     width: 10%;
+}
+
+.navbar-top {
+    background: #fcfdff;
+    padding: 0 10px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #059fff;
 }

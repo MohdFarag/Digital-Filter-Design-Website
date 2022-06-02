@@ -122,16 +122,16 @@ const addPassFilter = (i, real, imag ) => {
     target.parentNode.insertBefore(newPassDiv, target)       
 
     newPasslink.addEventListener("click", function(){
-        
+    
+        useAllPassButton.id = `useAllPass-${i}` 
+
         re = allPassFilter[i][0];
         im = allPassFilter[i][1];
 
         a = math.complex(re, im);
 
-        let zero = math.divide(math.complex(1, 0), math.conj(a));
-        let pole = a;
-
-        useAllPassButton.id = `useAllPass-${i}` 
+        let pole = math.divide(math.complex(1, 0), math.conj(a));
+        let zero = a;
         
         zplane_allPass.add_point([pole.re, pole.im], zplane_allPass.types.nonConjPole);
         zplane_allPass.add_point([zero.re, zero.im], zplane_allPass.types.nonConjZero);
@@ -151,9 +151,21 @@ const addPassFilter = (i, real, imag ) => {
 
 // Click in use button
 useAllPassButton.addEventListener('click', event => {
+
     var id = useAllPassButton.id
     i = Number(id[id.length-1])
-    zplane.add_point([allPassFilter[i][0], allPassFilter[i][1]], zplane.types.allPass);
+
+    re = allPassFilter[i][0];
+    im = allPassFilter[i][1];
+
+    a = math.complex(re, im);
+
+    let pole = math.divide(math.complex(1, 0), math.conj(a));
+    let zero = a;
+    
+    zplane.add_point([pole.re, pole.im], zplane_allPass.types.nonConjPole);
+    zplane.add_point([zero.re, zero.im], zplane_allPass.types.nonConjZero);
+
     drawResponse();
 });
 
