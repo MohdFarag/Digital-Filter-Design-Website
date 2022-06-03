@@ -414,6 +414,6 @@ function plotFirstTime(title,divId){
     Plotly.newPlot(divId, [Data], Layout);
 }
 
-plotFirstTime('Magnitude Response', 'original-signal-plot');
+plotFirstTime('Original Data', 'original-signal-plot');
 plotFirstTime('Filtered Data', 'filtered-signal-plot');
 plotFirstTime('AllPass', 'allpass-signal-plot');

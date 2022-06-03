@@ -97,6 +97,7 @@ const addPassFilter = (i, real, imag ) => {
     newPasslink.setAttribute("data-bs-target","#all-pass-canvas");
 
     var newPassImg = document.createElement('img');
+
     newPassImg.src = './images/a.png';
     newPassImg.width = '43';
     newPassImg.height = '43';
@@ -149,7 +150,7 @@ const addPassFilter = (i, real, imag ) => {
     });
 }
 
-// Click in use button
+// Click at use button
 useAllPassButton.addEventListener('click', event => {
 
     var id = useAllPassButton.id
@@ -166,6 +167,9 @@ useAllPassButton.addEventListener('click', event => {
     zplane.add_point([pole.re, pole.im], zplane_allPass.types.nonConjPole);
     zplane.add_point([zero.re, zero.im], zplane_allPass.types.nonConjZero);
 
+    newPassImg.src = "./images/ared.png";
+    newPassLabel.style.color = "red";
+    
     drawResponse();
 });
 
@@ -173,11 +177,11 @@ const addNewPassFilter = () =>{
 
     // Add Html
     if (allPassFilter.length >= 8) {
-
         return
     }
     var passReal = document.getElementsByName('passReal')[0].value
     var passImag = document.getElementsByName('passImag')[0].value
+
     if (passReal == "") {
         passReal = 0;
     }

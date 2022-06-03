@@ -133,3 +133,5 @@ dmypy.json
 node_modules/
 
 server/__pycache__/
+
+.vscode/
