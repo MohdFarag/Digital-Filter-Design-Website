@@ -153,13 +153,8 @@ useAllPassButton.addEventListener('click', event => {
     im = allPassFilter[i][1];
 
     a = math.complex(re, im);
-
-    let zero = a;
     
-    zplane.add_point([zero.re, zero.im], zplane_allPass.types.allPass);
-
-    // newPassImg.src = "./images/ared.png";
-    // newPassLabel.style.color = "red";
+    zplane.addAllPass([a.re, a.im]);
     
     drawResponse();
 });

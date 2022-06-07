@@ -207,9 +207,9 @@ function drawResponse(){
     
     let poles = zplane.get_poles();
     let zeros = zplane.get_zeros();
-    let allPass = zplane.get_allPass();
 
-    console.table(allPass);
+    console.table(poles);
+    console.table(zeros);
 
     magResponse = [];
     phaseResponse = [];
@@ -238,12 +238,6 @@ function drawResponse(){
             }else{
                 magPoint /= 1;
             }
-            phasePoint /= temp.arg();
-        }
-
-        // Calc. AllPass
-        for(let j = 0; j < allPass.length; j++){                           
-            let temp = math.subtract(Z[i], math.complex(allPass[j][0], allPass[j][1]));
             phasePoint /= temp.arg();
         }
 
