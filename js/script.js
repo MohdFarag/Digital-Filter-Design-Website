@@ -24,19 +24,12 @@ var allPassFilter = [[1,0.5],[0.5,1],[1, 1],[-0.75,0.9]] // Default Values
 
 // Add Point
 const addPoint = (type) => {
+    
     let re = 0;
     let im = 0;
+    
     if (type == "allPass") {
-        //add to our lib
-        let c = math.complex(re, im);
-        var sel = document.getElementById('allPass');
-        // create new option element
-        var opt = document.createElement('option');
-        // create text node to add to option element (opt)
-        opt.appendChild(document.createTextNode(c.toString()));
-        // set value property of opt
-        opt.value = c.toString();
-        sel.appendChild(opt);
+        // space
     }else{
         conjugate = document.getElementById('conjugate').checked;
 
@@ -161,14 +154,12 @@ useAllPassButton.addEventListener('click', event => {
 
     a = math.complex(re, im);
 
-    let pole = math.divide(math.complex(1, 0), math.conj(a));
     let zero = a;
     
-    zplane.add_point([pole.re, pole.im], zplane_allPass.types.nonConjPole);
-    zplane.add_point([zero.re, zero.im], zplane_allPass.types.nonConjZero);
+    zplane.add_point([zero.re, zero.im], zplane_allPass.types.allPass);
 
-    newPassImg.src = "./images/ared.png";
-    newPassLabel.style.color = "red";
+    // newPassImg.src = "./images/ared.png";
+    // newPassLabel.style.color = "red";
     
     drawResponse();
 });
