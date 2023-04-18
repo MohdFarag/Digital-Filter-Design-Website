@@ -19,6 +19,7 @@
 **Used packege:**
 
 ```
+numpy
 flask
 scipy
 flask_cors
