@@ -1,4 +1,4 @@
-BASE_URL = "https://digitalfilterdesign.vercel.app/server/"
+BASE_URL = "https://digitalfilterdesign.vercel.app/server"
 
 async function sendToServer(url = '', data = {}) {
     
