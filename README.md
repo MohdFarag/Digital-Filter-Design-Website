@@ -27,6 +27,10 @@ flask_cors
 
 ***to install***: `pip install [python-library]`
 
+## How To Run
+- Run the server: `py ./server/index.py`
+- Run the index.html
+
 ## Preivew
 
 ![Main window - light](Docs/website.png)
